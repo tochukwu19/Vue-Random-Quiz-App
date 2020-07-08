@@ -1,0 +1,115 @@
+<template>
+    <div class="app">
+        <div class="board">
+            <div class="mood" v-for="(mood,index) in moods" :key="index">
+                {{mood}}
+                <img src="./assets/remove.png" alt="button" @click="deleteMoodtxt(index)"/>
+            </div>
+            <div class="imgs" v-for="(img,index) in images" :key="img">
+                <img :src="img" alt="Image" @click="deleteMoodimg(index)">
+            </div>
+        </div>
+        <hr class="hr">
+        <div class="addMoods">
+            <div class="textadd">
+                <input type="text" placeholder="Text me" name="addTextMood" v-model="textMoods">
+                <button @click="addMoodtxt">Add Text Mood</button>
+            </div>
+            <div class="addImg">
+                <input type="text" placeholder="Please input a cdn link to your image" name="addMoodImg" v-model="imgMoods">
+                <button @click="addMoodimg">Add Image Mood</button>
+            </div>
+        </div>
+        <!-- <moodCount del="Hello"/> -->
+    </div>
+</template>
+
+<script>
+    import moodCount from "./components/moodCount";
+    import { eBus } from "./main"
+    export default {
+        
+        components: {
+            moodCount,
+        },
+       data(){
+           return{
+               moods: ["FONT SIZE 30PX","COLOR BLUE","AESTHETIC"],
+               textMoods: "",
+               images: ['https://res.cloudinary.com/teecodes/image/upload/v1588958951/pixzolo-photography-BiWb1Y8wpZk-unsplash_ziho5c.jpg'],
+               imgMoods: ""
+           }
+       },
+       methods:{
+           deleteMoodtxt(index){
+               this.moods.splice(index,1);
+           },
+           deleteMoodimg(index){
+               this.images.splice(index,1);
+           },
+           addMoodtxt(){
+                this.moods.push(this.textMoods);
+                this.textMoods = "";
+                eBus.$emit("taskAdded", "Domo");
+           },
+           addMoodimg(){
+               this.images.push(this.imgMoods);
+               this.imgMoods = "";
+           }
+       }
+    }
+</script>
+
+<style>
+    .board{
+        display: grid;
+        grid-auto-flow: dense;
+        grid-template-columns: repeat(auto-fill,minmax(150px,200px));
+        grid-gap: 10px;
+        justify-content: center;
+    }
+    .mood{
+        height: 170px;
+        width: 200px;
+        border-radius: 10px;
+        background: linear-gradient(to left, #e66465,#9198e5);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 18px;
+        color: antiquewhite;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .mood img{
+        height: 30px;
+    }
+    .hr{
+        border: 1px solid #eee;
+    }
+    .addMoods{
+        text-align: center;
+    }
+    .addMoods input{
+        padding: 10px;
+        border-radius: 15px;
+        border: 1px solid #333;
+        width: 300px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #333;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;    
+    }
+    .addMoods button{
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #333;
+        font-size: 16px;
+        color: #333;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .imgs img{
+        height: 170px;
+        width: 200px;
+        border-radius: 10px;
+    }
+</style>
